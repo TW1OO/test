@@ -56,13 +56,20 @@ export const FILTER_DEFINITIONS = [
     min: 50, max: 1000, defaultValue: 300,
     field: 'cafeDist',
   },
+  {
+    key: 'university',
+    label: '대학교 거리',
+    keywords: ['대학교', '대학', '캠퍼스', '동아대', '동아대학교'],
+    min: 100, max: 3000, defaultValue: 1000,
+    field: 'universityDist',
+  },
 ]
 
 export default function App() {
   const [query, setQuery] = useState('')
   const [filterValues, setFilterValues] = useState({
     conv: 300, subway: 500, mart: 1000, bus: 150,
-    police: 800, hospital: 1000, cafe: 300,
+    police: 800, hospital: 1000, cafe: 300, university: 1000,
   })
   // LLM이 결정한 활성 필터 키 목록
   const [activeKeys, setActiveKeys] = useState([])

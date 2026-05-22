@@ -23,6 +23,7 @@ Available filter keys (only include ones actually mentioned):
 - "police": 경찰서, 경찰, 지구대, 파출소
 - "hospital": 병원, 의원, 클리닉, 응급실
 - "cafe": 카페, 커피, 스타벅스, 이디야, 메가커피
+- "university": 대학교, 대학, 캠퍼스, 동아대, 동아대학교
 
 Rules:
 - operator is "AND" when conditions are combined with ~고/그리고/및/이면서

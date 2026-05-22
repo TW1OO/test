@@ -34,7 +34,7 @@ export default function MapView({ listings, activeId, onMarkerClick }) {
     if (mapObj.current) return
 
     mapObj.current = L.map(mapRef.current, { zoomControl: true }).setView(
-      [35.1000, 128.9780],
+      [35.1060, 128.9660],
       15
     )
 
