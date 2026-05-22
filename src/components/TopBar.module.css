@@ -1,0 +1,56 @@
+.topBar {
+  background: var(--yellow-500);
+  border-bottom: 2px solid var(--yellow-700);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+  flex-shrink: 0;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid var(--yellow-700);
+  border-radius: 24px;
+  background: #fffde7;
+  font-size: 15px;
+  color: var(--text-dark);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder {
+  color: #bcaaa4;
+}
+
+.input:focus {
+  border-color: var(--brown-light);
+  box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.3);
+}
+
+.btn {
+  padding: 10px 22px;
+  background: var(--brown-dark);
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  background: var(--brown-light);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}

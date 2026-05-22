@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(dir \"c:\\\\Users\\\\백태우\\\\OneDrive\\\\바탕 화면\\\\university\\\\해커톤\\\\test\" /b)"
+    ]
+  }
+}

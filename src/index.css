@@ -1,0 +1,60 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --yellow-100: #fffde7;
+  --yellow-200: #fff9c4;
+  --yellow-300: #fff176;
+  --yellow-400: #ffee58;
+  --yellow-500: #ffeb3b;
+  --yellow-600: #fdd835;
+  --yellow-700: #f9a825;
+  --brown-light: #8d6e63;
+  --brown-dark: #5d4037;
+  --text-dark: #3e2723;
+  --text-mid: #5d4037;
+  --border: #ffe082;
+  --shadow: rgba(249, 168, 37, 0.2);
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+  background: var(--yellow-100);
+  color: var(--text-dark);
+  overflow: hidden;
+}
+
+/* Leaflet 팝업 커스터마이징 */
+.leaflet-popup-content-wrapper {
+  background: var(--yellow-100);
+  border: 2px solid var(--yellow-600);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-tip {
+  background: var(--yellow-600);
+}
+
+.popup-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.popup-dist {
+  font-size: 12px;
+  color: var(--brown-dark);
+  font-weight: 600;
+}
+
+.popup-price {
+  font-size: 12px;
+  color: var(--brown-light);
+  margin-top: 2px;
+}
