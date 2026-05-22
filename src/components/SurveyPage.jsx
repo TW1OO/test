@@ -26,12 +26,35 @@ export default function SurveyPage({ onComplete }) {
 
   function parseLocalBudget(text) {
     const out = { maxMonthly: null, maxDeposit: null, preferTwoRoom: null, poiBoosts: {} }
+
+    // 예산 필터
     const monthly = text.match(/월세\s*(\d+)\s*만/)
     if (monthly) out.maxMonthly = Number(monthly[1])
     const deposit = text.match(/보증금\s*(\d+)\s*만/)
     if (deposit) out.maxDeposit = Number(deposit[1])
+
+    // 방 종류
     if (/투룸/.test(text)) out.preferTwoRoom = true
     else if (/원룸/.test(text)) out.preferTwoRoom = false
+
+    // POI 키워드 → poiBoosts (언급되면 중요도 5 부여)
+    const POI_KEYWORDS = [
+      { key: 'conv',        patterns: /편의점|편의/ },
+      { key: 'mart',        patterns: /마트|슈퍼|장보기|식료품/ },
+      { key: 'hospital',    patterns: /병원|의원|약국|건강/ },
+      { key: 'cafe',        patterns: /카페|커피/ },
+      { key: 'gym',         patterns: /헬스장|헬스|운동|피트니스|gym/ },
+      { key: 'university',  patterns: /대학교|동아대|학교|통학|캠퍼스/ },
+      { key: 'subway',      patterns: /지하철|역|전철|대중교통/ },
+      { key: 'police',      patterns: /경찰서|파출소|지구대|안전|치안/ },
+      { key: 'fireStation', patterns: /소방서|소방/ },
+      { key: 'admin',       patterns: /행정|동사무소|주민센터|행정복지/ },
+    ]
+
+    for (const { key, patterns } of POI_KEYWORDS) {
+      if (patterns.test(text)) out.poiBoosts[key] = 5
+    }
+
     return out
   }
 
