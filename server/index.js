@@ -54,5 +54,40 @@ app.post('/api/parse-query', async (req, res) => {
   }
 })
 
+const BUDGET_SYSTEM_PROMPT = `You are a Korean real estate preference extractor.
+Given a Korean natural language input about housing preferences, extract the following and return ONLY valid JSON:
+
+- maxMonthly: Maximum monthly rent in 만원 (integer, null if not mentioned)
+- maxDeposit: Maximum deposit in 만원 (integer, null if not mentioned)
+- preferTwoRoom: true if they prefer 투룸, false if 원룸, null if not mentioned
+- poiBoosts: Object mapping facility keys to importance 1~5 based on how strongly they want proximity.
+  Use 5 for strong need ("꼭 필요", "중요"), 4 for clear preference, 3 for mild mention.
+  Available keys: conv, subway, mart, police, hospital, cafe, gym, university
+
+Example input: "나는 월세 40만원 이하를 원하고 경찰서와 가까우면 좋겠어"
+Example output: {"maxMonthly":40,"maxDeposit":null,"preferTwoRoom":null,"poiBoosts":{"police":5}}
+
+Return ONLY valid JSON, no explanation.`
+
+app.post('/api/parse-budget', async (req, res) => {
+  const { text } = req.body
+  if (!text?.trim()) return res.json({ maxMonthly: null, maxDeposit: null, preferTwoRoom: null, poiBoosts: {} })
+
+  try {
+    const message = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 200,
+      system: BUDGET_SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: text }],
+    })
+
+    const parsed = JSON.parse(message.content[0].text.trim())
+    res.json(parsed)
+  } catch (err) {
+    console.error('[parse-budget error]', err.message)
+    res.status(500).json({ error: 'parse failed' })
+  }
+})
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Parse server → http://localhost:${PORT}`))

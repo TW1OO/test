@@ -1,0 +1,247 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+  backdrop-filter: blur(3px);
+}
+
+.modal {
+  background: #fff;
+  border-radius: 24px;
+  padding: 40px 36px 36px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.25);
+  animation: popIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.88) translateY(16px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+.badge {
+  display: inline-block;
+  background: var(--yellow-200, #fff9c4);
+  color: #8d6e63;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 4px 14px;
+  margin-bottom: 16px;
+  letter-spacing: 0.03em;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--brown-dark, #3e2723);
+  line-height: 1.5;
+  margin: 0 0 28px;
+}
+
+.section {
+  margin-bottom: 24px;
+}
+
+.sectionLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #a08060;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+}
+
+/* 우선순위 바 */
+.priorityList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.priorityRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.priorityEmoji {
+  font-size: 1rem;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.priorityName {
+  font-size: 0.82rem;
+  color: #5d4037;
+  width: 72px;
+  flex-shrink: 0;
+}
+
+.barWrap {
+  flex: 1;
+  height: 8px;
+  background: var(--yellow-100, #fffde7);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 99px;
+  background: var(--yellow-500, #fbc02d);
+  transition: width 0.6s ease;
+}
+
+.barHigh { background: var(--brown-dark, #3e2723); }
+
+.priorityScore {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #8d6e63;
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* 방 종류 */
+.roomBadges {
+  display: flex;
+  gap: 10px;
+}
+
+.roomBadge {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  border: 2px solid var(--yellow-300, #fff176);
+  text-align: center;
+  font-size: 0.82rem;
+  color: #8d6e63;
+}
+
+.roomBadgeActive {
+  border-color: var(--brown-dark, #3e2723);
+  background: var(--yellow-200, #fff9c4);
+  color: var(--brown-dark, #3e2723);
+  font-weight: 700;
+}
+
+.roomBadgeEmoji {
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+/* 매물 수 */
+.matchBox {
+  background: var(--yellow-100, #fffde7);
+  border: 1px solid var(--yellow-300, #fff176);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.matchText {
+  font-size: 0.88rem;
+  color: #6d4c41;
+}
+
+.matchCount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--brown-dark, #3e2723);
+}
+
+/* 상위 추천 매물 */
+.topList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.topItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--yellow-100, #fffde7);
+  border: 1px solid var(--yellow-300, #fff176);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
+.topRank {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #1a237e;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.topInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.topName {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brown-dark, #3e2723);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topPrice {
+  font-size: 0.73rem;
+  color: #8d6e63;
+}
+
+.topRoom {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  background: var(--yellow-200, #fff9c4);
+  color: #6d4c41;
+  border-radius: 5px;
+  padding: 1px 7px;
+  font-weight: 600;
+}
+
+/* CTA 버튼 */
+.btnConfirm {
+  width: 100%;
+  margin-top: 28px;
+  background: var(--brown-dark, #3e2723);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 16px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btnConfirm:hover {
+  background: #5d4037;
+  transform: translateY(-1px);
+}

@@ -1,0 +1,293 @@
+.root {
+  min-height: 100vh;
+  background: var(--yellow-100, #fffde7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* ── 랜딩 ── */
+.card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 52px 44px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10);
+}
+
+.landingEmoji {
+  font-size: 56px;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.landingTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--brown-dark, #3e2723);
+  margin: 0 0 12px;
+}
+
+.landingDesc {
+  font-size: 0.95rem;
+  color: #6d4c41;
+  line-height: 1.7;
+  margin: 0 0 40px;
+}
+
+.modeButtons {
+  display: flex;
+  gap: 16px;
+}
+
+.btnMode {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 12px;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: inherit;
+}
+
+.btnTest {
+  composes: btnMode;
+  background: var(--yellow-200, #fff9c4);
+  border-color: var(--yellow-400, #f9a825);
+  color: var(--brown-dark, #3e2723);
+}
+
+.btnTest:hover {
+  background: var(--yellow-300, #fff176);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(249, 168, 37, 0.3);
+}
+
+.btnFull {
+  composes: btnMode;
+  background: var(--brown-dark, #3e2723);
+  border-color: var(--brown-dark, #3e2723);
+  color: #fff;
+}
+
+.btnFull:hover {
+  background: #5d4037;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(62, 39, 35, 0.3);
+}
+
+.btnModeLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.btnModeSub {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+/* ── 설문 ── */
+.surveyCard {
+  background: #fff;
+  border-radius: 24px;
+  padding: 36px 44px 40px;
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.10);
+}
+
+.progressWrap {
+  height: 6px;
+  background: var(--yellow-200, #fff9c4);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--yellow-600, #f9a825);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+
+.stepLabel {
+  font-size: 0.8rem;
+  color: #a08060;
+  text-align: right;
+  margin-bottom: 32px;
+}
+
+.qEmoji {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.qText {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brown-dark, #3e2723);
+  text-align: center;
+  line-height: 1.5;
+  margin: 0 0 36px;
+}
+
+/* ── 5점 척도 ── */
+.scale {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.scaleBtn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 4px 12px;
+  border: 2px solid var(--yellow-300, #fff176);
+  border-radius: 14px;
+  background: var(--yellow-100, #fffde7);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  color: #6d4c41;
+}
+
+.scaleBtn:hover {
+  border-color: var(--yellow-500, #fbc02d);
+  background: var(--yellow-200, #fff9c4);
+}
+
+.scaleBtnActive {
+  border-color: var(--brown-dark, #3e2723) !important;
+  background: var(--brown-dark, #3e2723) !important;
+  color: #fff !important;
+}
+
+.scaleNum {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.scaleLabel {
+  font-size: 0.65rem;
+  text-align: center;
+  white-space: pre-line;
+  line-height: 1.3;
+}
+
+/* ── 예산 텍스트 입력 ── */
+.budgetTextarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid var(--yellow-300, #fff176);
+  border-radius: 14px;
+  background: var(--yellow-100, #fffde7);
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #3e2723;
+  resize: vertical;
+  margin-bottom: 32px;
+  outline: none;
+  transition: border-color 0.15s;
+  line-height: 1.6;
+}
+
+.budgetTextarea:focus {
+  border-color: var(--yellow-500, #fbc02d);
+}
+
+.budgetTextarea::placeholder {
+  color: #bca98a;
+}
+
+.budgetTextarea:disabled {
+  opacity: 0.6;
+}
+
+/* ── 예/아니오 ── */
+.yesnoWrap {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
+.yesnoBtn {
+  flex: 1;
+  max-width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 12px;
+  border: 2px solid var(--yellow-300, #fff176);
+  border-radius: 16px;
+  background: var(--yellow-100, #fffde7);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  color: #6d4c41;
+}
+
+.yesnoBtn:hover {
+  border-color: var(--yellow-500, #fbc02d);
+  background: var(--yellow-200, #fff9c4);
+}
+
+/* active 상태는 공용 scaleBtnActive 재사용 */
+
+/* ── 네비게이션 ── */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btnPrev {
+  background: none;
+  border: none;
+  color: #a08060;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 8px 0;
+  font-family: inherit;
+}
+
+.btnPrev:hover { color: var(--brown-dark, #3e2723); }
+
+.btnNext {
+  background: var(--brown-dark, #3e2723);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.btnNext:hover:not(:disabled) {
+  background: #5d4037;
+  transform: translateY(-1px);
+}
+
+.btnNext:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}

@@ -1,0 +1,211 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--yellow-100, #fffde7);
+  border-right: 1px solid var(--yellow-300, #fff176);
+  overflow: hidden;
+}
+
+.header {
+  padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--yellow-300, #fff176);
+  background: var(--yellow-200, #fff9c4);
+  flex-shrink: 0;
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.personality {
+  font-size: 0.83rem;
+  font-weight: 700;
+  color: var(--brown-dark, #3e2723);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.btnToggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .btnToggle {
+    display: flex;
+    background: none;
+    border: 1.5px solid var(--yellow-400, #f9a825);
+    border-radius: 8px;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--brown-dark, #3e2723);
+    transition: background 0.15s, transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  .btnToggle:hover { background: var(--yellow-300, #fff176); }
+
+  .btnToggleOpen {
+    transform: rotate(180deg);
+  }
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.count {
+  font-size: 0.78rem;
+  color: #8d6e63;
+}
+
+.btnRetake {
+  background: var(--brown-dark, #3e2723);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.btnRetake:hover { background: #5d4037; }
+
+/* 리스트 접기/펼치기 */
+.listWrap {
+  flex: 1;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.listWrapClosed {
+  grid-template-rows: 0fr;
+}
+
+.listInner {
+  overflow: hidden;
+}
+
+.list {
+  overflow-y: auto;
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 100%;
+}
+
+.card {
+  background: #fff;
+  border: 2px solid var(--yellow-300, #fff176);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.card:hover {
+  border-color: var(--yellow-500, #fbc02d);
+  box-shadow: 0 2px 10px rgba(249, 168, 37, 0.2);
+}
+
+.cardActive {
+  border-color: var(--brown-dark, #3e2723) !important;
+  box-shadow: 0 2px 12px rgba(62, 39, 35, 0.2) !important;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.cardName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--brown-dark, #3e2723);
+}
+
+.cardBadges {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.cardRoom {
+  font-size: 0.72rem;
+  background: var(--yellow-200, #fff9c4);
+  color: #6d4c41;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+.rankBadge {
+  font-size: 0.68rem;
+  background: #1a237e;
+  color: #fff;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cardPrice {
+  font-size: 0.82rem;
+  color: #5d4037;
+  margin-bottom: 6px;
+}
+
+.cardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag {
+  font-size: 0.68rem;
+  background: var(--yellow-100, #fffde7);
+  border: 1px solid var(--yellow-300, #fff176);
+  color: #795548;
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+
+.empty {
+  text-align: center;
+  color: #a08060;
+  font-size: 0.88rem;
+  padding: 40px 16px;
+  line-height: 1.8;
+}
+
+/* 모바일 */
+@media (max-width: 768px) {
+  .sidebar {
+    border-right: none;
+    height: 100%;
+  }
+
+  .listWrap {
+    max-height: none;
+  }
+}

@@ -10,11 +10,67 @@
   grid-template-columns: 360px 1fr;
   flex: 1;
   overflow: hidden;
+  min-height: 0;
+}
+
+/* 모달 열림: 지도 전체 너비 */
+.gridModal {
+  grid-template-columns: 1fr;
+}
+
+.sidebarCol {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.mapCol {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* 지도 모드에서 목록 열기 플로팅 버튼 */
+.btnShowList {
+  display: none;
 }
 
 @media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+  .btnShowList {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    background: var(--brown-dark, #3e2723);
+    color: #fff;
+    border: none;
+    border-radius: 99px;
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    white-space: nowrap;
   }
+}
+
+/* ── 모바일: 목록 / 지도 전환 ── */
+@media (max-width: 768px) {
+  .grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 목록 모드: 목록만 표시 */
+  .gridList .sidebarCol { flex: 1; }
+  .gridList .mapCol     { display: none; }
+
+  /* 지도 모드: 지도만 표시 */
+  .gridMap .mapCol     { flex: 1; }
+  .gridMap .sidebarCol { display: none; }
 }

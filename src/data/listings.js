@@ -1,15 +1,15 @@
 import { poisByType } from './pois'
 import { nearestPoi } from '../utils/distance'
+import rawCsv from './동아대_하단역근처_원룸투룸_30개_최종 (1).csv?raw'
 
 function convBrand(name) {
-  if (name.startsWith('GS25'))     return 'GS25'
-  if (name.startsWith('CU'))       return 'CU'
-  if (name.startsWith('이마트24')) return '이마트24'
+  if (name.startsWith('GS25'))       return 'GS25'
+  if (name.startsWith('CU'))         return 'CU'
+  if (name.startsWith('이마트24'))   return '이마트24'
   if (name.startsWith('세븐일레븐')) return '세븐일레븐'
   return name
 }
 
-/** 매물 좌표로부터 각 POI 타입별 최단 거리를 계산 */
 function computeDists(lat, lng) {
   const result = {}
   for (const [type, list] of Object.entries(poisByType)) {
@@ -18,64 +18,75 @@ function computeDists(lat, lng) {
   return result
 }
 
-const rawListings = [
-  {
-    id: 1,
-    name: '동아하이빌 원룸',
-    room: '101호',
-    monthly: 35, deposit: 300,
-    tags: ['풀옵션', '반려동물 가능', '엘리베이터'],
-    lat: 35.1055, lng: 128.9675,
-  },
-  {
-    id: 2,
-    name: '하단역 청년 원룸',
-    room: '202호',
-    monthly: 40, deposit: 500,
-    tags: ['신축', '주차 가능'],
-    lat: 35.1028, lng: 128.9680,
-  },
-  {
-    id: 3,
-    name: '선진빌라 202',
-    room: '202호',
-    monthly: 28, deposit: 200,
-    tags: ['저렴', '보증금 협의'],
-    lat: 35.1042, lng: 128.9648,
-  },
-  {
-    id: 4,
-    name: '브라운스톤 오피스텔',
-    room: '305호',
-    monthly: 55, deposit: 1000,
-    tags: ['오피스텔', '헬스장', '보안'],
-    lat: 35.1072, lng: 128.9652,
-  },
-  {
-    id: 5,
-    name: '그린파크 원룸',
-    room: '103호',
-    monthly: 32, deposit: 300,
-    tags: ['공원 인접', '채광 좋음'],
-    lat: 35.1038, lng: 128.9672,
-  },
-]
+function parseCsv(raw) {
+  const lines = raw
+    .replace(/^﻿/, '')   // BOM 제거
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l)
+
+  return lines.slice(1).map(line => {
+    // 주소에 쉼표 없으므로 단순 split 사용
+    const cols = line.split(',')
+    const id       = Number(cols[0])
+    const name     = cols[1]?.trim()
+    const roomType = cols[2]?.trim()   // 원룸 | 투룸
+    const lat      = Number(cols[4])
+    const lng      = Number(cols[5])
+    const address  = cols[6]?.trim()
+
+    // 방 종류별 월세/보증금 생성 (현실적인 하단동 시세)
+    const isOneRoom = roomType === '원룸'
+    const monthly  = isOneRoom ? 25 + (id % 7) * 3  : 40 + (id % 6) * 5
+    const deposit  = isOneRoom ? 100 + (id % 5) * 50 : 300 + (id % 4) * 100
+
+    const tags = isOneRoom
+      ? ['원룸', id % 3 === 0 ? '풀옵션' : id % 3 === 1 ? '채광 좋음' : '보증금 협의']
+      : ['투룸', id % 2 === 0 ? '주차 가능' : '신축']
+
+    return { id, name, room: roomType, monthly, deposit, tags, address, lat, lng }
+  })
+}
+
+const rawListings = parseCsv(rawCsv)
 
 export const listings = rawListings.map(l => {
   const d = computeDists(l.lat, l.lng)
-
-  const nearestConv = d.conv
+  const nc = d.conv
   return {
     ...l,
-    convDist:       nearestConv?.dist  ?? null,
-    convName:       nearestConv ? convBrand(nearestConv.poi.name) : '편의점',
-    subwayDist:     d.subway?.dist       ?? null,
-    martDist:       d.mart?.dist         ?? null,
-    hospitalDist:   d.hospital?.dist     ?? null,
-    cafeDist:       d.cafe?.dist         ?? null,
-    policeDist:     d.police?.dist       ?? null,
-    gymDist:        d.gym?.dist          ?? null,
-    universityDist: d.university?.dist   ?? null,
+    convDist:           nc?.dist                ?? null,
+    convName:           nc ? convBrand(nc.poi.name) : '편의점',
+    convPoiLat:         nc?.poi.lat             ?? null,
+    convPoiLng:         nc?.poi.lng             ?? null,
+    subwayDist:         d.subway?.dist          ?? null,
+    subwayName:         d.subway?.poi.name      ?? null,
+    subwayPoiLat:       d.subway?.poi.lat       ?? null,
+    subwayPoiLng:       d.subway?.poi.lng       ?? null,
+    martDist:           d.mart?.dist            ?? null,
+    martName:           d.mart?.poi.name        ?? null,
+    martPoiLat:         d.mart?.poi.lat         ?? null,
+    martPoiLng:         d.mart?.poi.lng         ?? null,
+    hospitalDist:       d.hospital?.dist        ?? null,
+    hospitalName:       d.hospital?.poi.name    ?? null,
+    hospitalPoiLat:     d.hospital?.poi.lat     ?? null,
+    hospitalPoiLng:     d.hospital?.poi.lng     ?? null,
+    cafeDist:           d.cafe?.dist            ?? null,
+    cafeName:           d.cafe?.poi.name        ?? null,
+    cafePoiLat:         d.cafe?.poi.lat         ?? null,
+    cafePoiLng:         d.cafe?.poi.lng         ?? null,
+    policeDist:         d.police?.dist          ?? null,
+    policeName:         d.police?.poi.name      ?? null,
+    policePoiLat:       d.police?.poi.lat       ?? null,
+    policePoiLng:       d.police?.poi.lng       ?? null,
+    gymDist:            d.gym?.dist             ?? null,
+    gymName:            d.gym?.poi.name         ?? null,
+    gymPoiLat:          d.gym?.poi.lat          ?? null,
+    gymPoiLng:          d.gym?.poi.lng          ?? null,
+    universityDist:     d.university?.dist      ?? null,
+    universityName:     d.university?.poi.name  ?? null,
+    universityPoiLat:   d.university?.poi.lat   ?? null,
+    universityPoiLng:   d.university?.poi.lng   ?? null,
   }
 })
 

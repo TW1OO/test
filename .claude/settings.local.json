@@ -4,7 +4,8 @@
       "Bash(npm create *)",
       "Bash(npm install *)",
       "Bash(npm run *)",
-      "Bash(dir \"c:\\\\Users\\\\백태우\\\\OneDrive\\\\바탕 화면\\\\university\\\\해커톤\\\\test\" /b)"
+      "Bash(dir \"c:\\\\Users\\\\백태우\\\\OneDrive\\\\바탕 화면\\\\university\\\\해커톤\\\\test\" /b)",
+      "Bash(powershell -Command \"Import-Csv '사하구_하단동_상권DB_대학교추가 \\(1\\).csv' | Select-Object -ExpandProperty 업종 | Sort-Object -Unique\")"
     ]
   }
 }

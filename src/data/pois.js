@@ -1,69 +1,40 @@
-/**
- * 사하구 하단동 상권 DB (60개) — 대학교 포함
- * type: 'subway' | 'conv' | 'hospital' | 'cafe' | 'mart' | 'gym' | 'university'
- */
-export const pois = [
-  { id: 1,  name: '블루밍 하단점',          type: 'cafe',       lat: 35.105344, lng: 128.965344 },
-  { id: 2,  name: '피트니스존 하단점',       type: 'gym',        lat: 35.108463, lng: 128.966100 },
-  { id: 3,  name: '하단병원 하단점',         type: 'hospital',   lat: 35.109462, lng: 128.965426 },
-  { id: 4,  name: '하단역',                  type: 'subway',     lat: 35.102339, lng: 128.969980 },
-  { id: 5,  name: '팩토리짐 하단점',         type: 'gym',        lat: 35.106927, lng: 128.962273 },
-  { id: 6,  name: '블루밍 하단2점',          type: 'cafe',       lat: 35.102926, lng: 128.969616 },
-  { id: 7,  name: '스타카페 하단점',         type: 'cafe',       lat: 35.107928, lng: 128.962708 },
-  { id: 8,  name: '세이마트 하단점',         type: 'mart',       lat: 35.107828, lng: 128.965211 },
-  { id: 9,  name: 'CU 하단점',              type: 'conv',       lat: 35.105760, lng: 128.968561 },
-  { id: 10, name: '블루밍 하단3점',          type: 'cafe',       lat: 35.109750, lng: 128.969152 },
-  { id: 11, name: '이마트24 하단점',         type: 'conv',       lat: 35.102980, lng: 128.965811 },
-  { id: 12, name: '블루밍 하단4점',          type: 'cafe',       lat: 35.109100, lng: 128.965277 },
-  { id: 13, name: '팩토리짐 하단2점',        type: 'gym',        lat: 35.104544, lng: 128.965876 },
-  { id: 14, name: '블루밍 하단5점',          type: 'cafe',       lat: 35.107745, lng: 128.969943 },
-  { id: 15, name: 'GS25 하단점',            type: 'conv',       lat: 35.106403, lng: 128.967985 },
-  { id: 16, name: '하단병원 하단2점',        type: 'hospital',   lat: 35.106452, lng: 128.966981 },
-  { id: 17, name: '블루밍 하단6점',          type: 'cafe',       lat: 35.104786, lng: 128.969417 },
-  { id: 18, name: '세이마트 하단2점',        type: 'mart',       lat: 35.109438, lng: 128.963966 },
-  { id: 19, name: '피트니스존 하단2점',      type: 'gym',        lat: 35.104999, lng: 128.967467 },
-  { id: 20, name: '블루밍 하단7점',          type: 'cafe',       lat: 35.106724, lng: 128.969065 },
-  { id: 21, name: '피트니스존 하단3점',      type: 'gym',        lat: 35.107335, lng: 128.969490 },
-  { id: 22, name: '이마트24 하단2점',        type: 'conv',       lat: 35.105514, lng: 128.965260 },
-  { id: 23, name: 'CU 하단2점',             type: 'conv',       lat: 35.108826, lng: 128.967267 },
-  { id: 24, name: '커피하우스 하단점',       type: 'cafe',       lat: 35.105156, lng: 128.968963 },
-  { id: 25, name: '블루밍 하단8점',          type: 'cafe',       lat: 35.107828, lng: 128.962395 },
-  { id: 26, name: '세이마트 하단3점',        type: 'mart',       lat: 35.109292, lng: 128.965833 },
-  { id: 27, name: '우리의원 하단점',         type: 'hospital',   lat: 35.106811, lng: 128.965409 },
-  { id: 28, name: '커피하우스 하단2점',      type: 'cafe',       lat: 35.106275, lng: 128.964208 },
-  { id: 29, name: '블루밍 하단9점',          type: 'cafe',       lat: 35.103007, lng: 128.967726 },
-  { id: 30, name: '우리의원 하단2점',        type: 'hospital',   lat: 35.107151, lng: 128.968813 },
-  { id: 31, name: '블루밍 하단10점',         type: 'cafe',       lat: 35.105245, lng: 128.969670 },
-  { id: 32, name: '스타카페 하단2점',        type: 'cafe',       lat: 35.102759, lng: 128.962752 },
-  { id: 33, name: '블루밍 하단11점',         type: 'cafe',       lat: 35.102575, lng: 128.962953 },
-  { id: 34, name: '세이마트 하단4점',        type: 'mart',       lat: 35.109537, lng: 128.965170 },
-  { id: 35, name: '커피하우스 하단3점',      type: 'cafe',       lat: 35.103472, lng: 128.965022 },
-  { id: 36, name: 'CU 하단3점',             type: 'conv',       lat: 35.106831, lng: 128.966039 },
-  { id: 37, name: '피트니스존 하단4점',      type: 'gym',        lat: 35.108916, lng: 128.965183 },
-  { id: 38, name: '우리의원 하단3점',        type: 'hospital',   lat: 35.109712, lng: 128.966841 },
-  { id: 39, name: '팩토리짐 하단3점',        type: 'gym',        lat: 35.103249, lng: 128.967809 },
-  { id: 40, name: '피트니스존 하단5점',      type: 'gym',        lat: 35.109586, lng: 128.962789 },
-  { id: 41, name: '블루밍 하단12점',         type: 'cafe',       lat: 35.104591, lng: 128.966135 },
-  { id: 42, name: '세이마트 하단5점',        type: 'mart',       lat: 35.106206, lng: 128.966485 },
-  { id: 43, name: '블루밍 하단13점',         type: 'cafe',       lat: 35.104842, lng: 128.964545 },
-  { id: 44, name: '블루밍 하단14점',         type: 'cafe',       lat: 35.102587, lng: 128.968515 },
-  { id: 45, name: '센터마트 하단점',         type: 'mart',       lat: 35.109576, lng: 128.967439 },
-  { id: 46, name: '세이마트 하단6점',        type: 'mart',       lat: 35.106104, lng: 128.969005 },
-  { id: 47, name: '세븐일레븐 하단점',       type: 'conv',       lat: 35.107292, lng: 128.962336 },
-  { id: 48, name: '피트니스존 하단6점',      type: 'gym',        lat: 35.107790, lng: 128.965648 },
-  { id: 49, name: '우리의원 하단4점',        type: 'hospital',   lat: 35.105894, lng: 128.967055 },
-  { id: 50, name: '피트니스존 하단7점',      type: 'gym',        lat: 35.103383, lng: 128.964984 },
-  { id: 51, name: '블루밍 하단15점',         type: 'cafe',       lat: 35.108068, lng: 128.967344 },
-  { id: 52, name: '블루밍 하단16점',         type: 'cafe',       lat: 35.104098, lng: 128.965850 },
-  { id: 53, name: '우리의원 하단5점',        type: 'hospital',   lat: 35.106918, lng: 128.968599 },
-  { id: 54, name: '우리의원 하단6점',        type: 'hospital',   lat: 35.103616, lng: 128.969005 },
-  { id: 55, name: '센터마트 하단2점',        type: 'mart',       lat: 35.103403, lng: 128.966179 },
-  { id: 56, name: '블루밍 하단17점',         type: 'cafe',       lat: 35.105699, lng: 128.962866 },
-  { id: 57, name: '피트니스존 하단8점',      type: 'gym',        lat: 35.103647, lng: 128.964682 },
-  { id: 58, name: 'GS25 하단2점',           type: 'conv',       lat: 35.104577, lng: 128.964034 },
-  { id: 59, name: '커피하우스 하단4점',      type: 'cafe',       lat: 35.103907, lng: 128.967505 },
-  { id: 60, name: '동아대학교 승학캠퍼스',   type: 'university', lat: 35.115300, lng: 128.967100 },
-]
+import rawCsv from './사하구_하단동_상권DB_대학교추가 (1).csv?raw'
+
+const TYPE_MAP = {
+  '카페':    'cafe',
+  '헬스장':  'gym',
+  '병원':    'hospital',
+  '지하철역': 'subway',
+  '편의점':  'conv',
+  '마트':    'mart',
+  '대학교':  'university',
+}
+
+function parsePois(raw) {
+  const lines = raw
+    .replace(/^﻿/, '')  // BOM 제거
+    .split('\n')
+    .map(l => l.trim())
+    .filter(l => l)
+
+  return lines.slice(1).map(line => {
+    const cols = line.split(',')
+    const id   = Number(cols[0])
+    const name = cols[1]?.trim()
+    const type = TYPE_MAP[cols[2]?.trim()] ?? cols[2]?.trim()
+    const lat  = Number(cols[4])
+    const lng  = Number(cols[5])
+    return { id, name, type, lat, lng }
+  })
+}
+
+const rawPois = parsePois(rawCsv)
+
+// 하단역환승센터(아트 가든 하단) 좌표로 고정 보정
+const SUBWAY_OVERRIDE = { lat: 35.103690, lng: 128.967215, name: '하단역환승센터' }
+export const pois = rawPois.map(p =>
+  p.type === 'subway' ? { ...p, ...SUBWAY_OVERRIDE } : p
+)
 
 export const poisByType = {
   conv:       pois.filter(p => p.type === 'conv'),
@@ -73,5 +44,5 @@ export const poisByType = {
   cafe:       pois.filter(p => p.type === 'cafe'),
   gym:        pois.filter(p => p.type === 'gym'),
   university: pois.filter(p => p.type === 'university'),
-  police:     [], // 데이터 없음
+  police:     [],
 }

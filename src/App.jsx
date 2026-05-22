@@ -1,181 +1,174 @@
-import { useState, useMemo, useCallback } from 'react'
-import TopBar from './components/TopBar'
-import Sidebar from './components/Sidebar'
+import { useState, useMemo } from 'react'
+import SurveyPage from './components/SurveyPage'
+import ResultsSidebar from './components/ResultsSidebar'
+import ResultModal from './components/ResultModal'
 import MapView from './components/MapView'
+import ListingDetailModal from './components/ListingDetailModal'
 import { listings as allListings } from './data/listings'
-import { parseQuery } from './utils/parseQuery'
+import { computeResults, generatePersonality, scoreListings } from './utils/surveyScore'
 import styles from './App.module.css'
 
-export const FILTER_DEFINITIONS = [
-  {
-    key: 'conv',
-    label: '편의점 거리',
-    keywords: ['편의점', 'cu', 'gs25', '세븐일레븐', '이마트24', 'gs 25'],
-    min: 50, max: 1000, defaultValue: 300,
-    field: 'convDist',
-  },
-  {
-    key: 'subway',
-    label: '지하철역 거리',
-    keywords: ['지하철', '지하철역', '전철', '지하철 역'],
-    min: 100, max: 2000, defaultValue: 500,
-    field: 'subwayDist',
-  },
-  {
-    key: 'mart',
-    label: '대형마트 거리',
-    keywords: ['마트', '대형마트', '이마트', '홈플러스', '롯데마트'],
-    min: 100, max: 3000, defaultValue: 1000,
-    field: 'martDist',
-  },
-  {
-    key: 'bus',
-    label: '버스정류장',
-    keywords: ['버스', '버스정류장', '정류장'],
-    min: 50, max: 500, defaultValue: 150,
-    field: 'busDist',
-  },
-  {
-    key: 'police',
-    label: '경찰서 거리',
-    keywords: ['경찰서', '경찰', '지구대', '파출소'],
-    min: 100, max: 2000, defaultValue: 800,
-    field: 'policeDist',
-  },
-  {
-    key: 'hospital',
-    label: '병원 거리',
-    keywords: ['병원', '의원', '클리닉', '응급실', '약국'],
-    min: 100, max: 3000, defaultValue: 1000,
-    field: 'hospitalDist',
-  },
-  {
-    key: 'cafe',
-    label: '카페 거리',
-    keywords: ['카페', '커피', '스타벅스', '이디야', '메가커피', '카페인'],
-    min: 50, max: 1000, defaultValue: 300,
-    field: 'cafeDist',
-  },
-  {
-    key: 'university',
-    label: '대학교 거리',
-    keywords: ['대학교', '대학', '캠퍼스', '동아대', '동아대학교'],
-    min: 100, max: 3000, defaultValue: 1000,
-    field: 'universityDist',
-  },
-]
+const POI_META = {
+  conv:       { label: '편의점', emoji: '🏪', latKey: 'convPoiLat',       lngKey: 'convPoiLng',       distKey: 'convDist',       nameKey: 'convName' },
+  mart:       { label: '마트',   emoji: '🛒', latKey: 'martPoiLat',       lngKey: 'martPoiLng',       distKey: 'martDist',       nameKey: 'martName' },
+  hospital:   { label: '병원',   emoji: '🏥', latKey: 'hospitalPoiLat',   lngKey: 'hospitalPoiLng',   distKey: 'hospitalDist',   nameKey: 'hospitalName' },
+  cafe:       { label: '카페',   emoji: '☕', latKey: 'cafePoiLat',       lngKey: 'cafePoiLng',       distKey: 'cafeDist',       nameKey: 'cafeName' },
+  gym:        { label: '헬스장', emoji: '💪', latKey: 'gymPoiLat',        lngKey: 'gymPoiLng',        distKey: 'gymDist',        nameKey: 'gymName' },
+  university: { label: '대학교', emoji: '🎓', latKey: 'universityPoiLat', lngKey: 'universityPoiLng', distKey: 'universityDist', nameKey: 'universityName' },
+  subway:     { label: '지하철', emoji: '🚇', latKey: 'subwayPoiLat',     lngKey: 'subwayPoiLng',     distKey: 'subwayDist',     nameKey: 'subwayName' },
+  police:     { label: '경찰서', emoji: '🚔', latKey: 'policePoiLat',     lngKey: 'policePoiLng',     distKey: 'policeDist',     nameKey: 'policeName' },
+}
 
 export default function App() {
-  const [query, setQuery] = useState('')
-  const [filterValues, setFilterValues] = useState({
-    conv: 300, subway: 500, mart: 1000, bus: 150,
-    police: 800, hospital: 1000, cafe: 300, university: 1000,
-  })
-  // LLM이 결정한 활성 필터 키 목록
-  const [activeKeys, setActiveKeys] = useState([])
-  // AND: 모두 만족 / OR: 하나만 만족
-  const [operator, setOperator] = useState('AND')
-  const [isParsing, setIsParsing] = useState(false)
-  const [activeId, setActiveId] = useState(null)
+  const [page, setPage]                 = useState('survey')
+  const [showModal, setShowModal]       = useState(false)
+  const [listOpen, setListOpen]         = useState(true)
+  const [surveyData, setSurveyData]     = useState(null)
+  const [activeId, setActiveId]         = useState(null)
+  const [detailListing, setDetailListing] = useState(null)
 
-  // 타이핑 중 실시간 미리보기 (키워드만 감지)
-  const previewDefs = useMemo(() => {
-    const lower = query.toLowerCase()
-    return FILTER_DEFINITIONS.filter(def =>
-      def.keywords.some(kw => lower.includes(kw))
-    )
-  }, [query])
+  function handleSurveyComplete(answers, questions, budgetData) {
+    const results     = computeResults(answers, questions)
+    const personality = generatePersonality(answers, questions)
+    setSurveyData({ ...results, personality, budgetData: budgetData ?? null })
+    setPage('results')
+    setShowModal(true)
+    setListOpen(true)
+    setActiveId(null)
+  }
 
-  // 검색 후 확정된 활성 필터 정의
-  const activeFilterDefs = useMemo(
-    () => FILTER_DEFINITIONS.filter(def => activeKeys.includes(def.key)),
-    [activeKeys]
-  )
+  function handleRetake() {
+    setPage('survey')
+    setSurveyData(null)
+    setShowModal(false)
+    setActiveId(null)
+    setDetailListing(null)
+  }
 
-  // 필터링 로직: AND = 모두 만족, OR = 하나라도 만족
+  function handleListingClick(id) {
+    setActiveId(id)
+    setDetailListing(filtered.find(l => l.id === id) ?? null)
+  }
+
+  // 가중 코사인 유사도로 매물 랭킹 (LLM 예산 데이터 블렌딩 포함)
   const filtered = useMemo(() => {
-    if (activeFilterDefs.length === 0) {
-      return [...allListings].sort((a, b) => a.convDist - b.convDist)
-    }
-    // dist가 null이면 POI 데이터 없음 → AND에서는 통과, OR에서는 불충족으로 처리
-    const check = (l, def) => {
-      const dist = l[def.field]
-      if (dist === null) return operator === 'AND'
-      return dist <= filterValues[def.key]
-    }
-    return allListings
-      .filter(l =>
-        operator === 'AND'
-          ? activeFilterDefs.every(def => check(l, def))
-          : activeFilterDefs.some(def => check(l, def))
-      )
-      .sort((a, b) => (a.convDist ?? 99999) - (b.convDist ?? 99999))
-  }, [activeFilterDefs, filterValues, operator])
+    if (!surveyData) return []
+    const { importanceMap, preferTwoRoom, roomTypeImportance, fieldMap, budgetData } = surveyData
 
-  function handleFilterChange(key, value) {
-    setFilterValues(prev => ({ ...prev, [key]: value }))
-  }
-
-  function toggleOperator() {
-    setOperator(prev => (prev === 'AND' ? 'OR' : 'AND'))
-  }
-
-  const handleSearch = useCallback(async () => {
-    if (!query.trim()) return
-    setIsParsing(true)
-    try {
-      const result = await parseQuery(query, FILTER_DEFINITIONS)
-      setActiveKeys(result.filters)
-      setOperator(result.operator)
-      // 결과 중 첫 번째 매물로 지도 이동
-      const defs = FILTER_DEFINITIONS.filter(d => result.filters.includes(d.key))
-      const chk = (l, d) => {
-        const dist = l[d.field]
-        if (dist === null) return result.operator === 'AND'
-        return dist <= filterValues[d.key]
+    // LLM poiBoosts를 설문 중요도와 블렌딩 (설문 60% : LLM 40%)
+    const blendedImportance = { ...importanceMap }
+    if (budgetData?.poiBoosts) {
+      for (const [key, boost] of Object.entries(budgetData.poiBoosts)) {
+        blendedImportance[key] = (blendedImportance[key] ?? 3) * 0.6 + boost * 0.4
       }
-      const nextFiltered = allListings
-        .filter(l =>
-          defs.length === 0
-            ? true
-            : result.operator === 'AND'
-              ? defs.every(d => chk(l, d))
-              : defs.some(d => chk(l, d))
-        )
-        .sort((a, b) => (a.convDist ?? 99999) - (b.convDist ?? 99999))
-      if (nextFiltered.length > 0) setActiveId(nextFiltered[0].id)
-    } finally {
-      setIsParsing(false)
     }
-  }, [query, filterValues])
+
+    // 방 타입 선호 블렌딩
+    const effectivePreferTwoRoom =
+      budgetData?.preferTwoRoom != null ? budgetData.preferTwoRoom : preferTwoRoom
+    const effectiveRoomType =
+      budgetData?.preferTwoRoom != null
+        ? roomTypeImportance * 0.6 + (budgetData.preferTwoRoom ? 5 : 1) * 0.4
+        : roomTypeImportance
+
+    let scored = scoreListings(allListings, blendedImportance, effectivePreferTwoRoom, effectiveRoomType, fieldMap)
+
+    // 예산 필터
+    if (budgetData?.maxMonthly) scored = scored.filter(l => l.monthly <= budgetData.maxMonthly)
+    if (budgetData?.maxDeposit)  scored = scored.filter(l => l.deposit  <= budgetData.maxDeposit)
+
+    return scored
+  }, [surveyData])
+
+  // 선택된 매물의 중요 POI 마커 (중요도 3점 이상)
+  const detailPoiMarkers = useMemo(() => {
+    if (!detailListing || !surveyData) return []
+    return Object.entries(surveyData.importanceMap)
+      .filter(([, avg]) => avg >= 3)
+      .map(([key]) => {
+        const meta = POI_META[key]
+        if (!meta) return null
+        const lat = detailListing[meta.latKey]
+        const lng = detailListing[meta.lngKey]
+        if (lat == null || lng == null) return null
+        return {
+          lat, lng,
+          emoji: meta.emoji,
+          label: meta.label,
+          name:  detailListing[meta.nameKey],
+          dist:  detailListing[meta.distKey],
+        }
+      })
+      .filter(Boolean)
+  }, [detailListing, surveyData])
+
+  if (page === 'survey') {
+    return <SurveyPage onComplete={handleSurveyComplete} />
+  }
+
+  const { personality, importanceMap, preferTwoRoom } = surveyData
+
+  // 그리드 클래스 결정
+  const gridClass = [
+    styles.grid,
+    showModal                     ? styles.gridModal : '',
+    !showModal && listOpen        ? styles.gridList  : '',
+    !showModal && !listOpen       ? styles.gridMap   : '',
+  ].join(' ')
 
   return (
     <div className={styles.layout}>
-      <TopBar
-        query={query}
-        onChange={setQuery}
-        onSearch={handleSearch}
-        isParsing={isParsing}
-      />
-      <div className={styles.grid}>
-        <Sidebar
-          previewDefs={previewDefs}
-          activeFilterDefs={activeFilterDefs}
-          filterValues={filterValues}
-          onFilterChange={handleFilterChange}
-          operator={operator}
-          onToggleOperator={toggleOperator}
-          listings={filtered}
-          activeId={activeId}
-          onCardClick={setActiveId}
-          isParsing={isParsing}
-        />
-        <MapView
-          listings={filtered}
-          activeId={activeId}
-          onMarkerClick={setActiveId}
-        />
+      <div className={gridClass}>
+        {!showModal && (
+          <div className={styles.sidebarCol}>
+            <ResultsSidebar
+              listings={filtered}
+              activeId={activeId}
+              isOpen={listOpen}
+              onToggle={() => setListOpen(o => !o)}
+              onCardClick={handleListingClick}
+              personality={personality}
+              onRetake={handleRetake}
+            />
+          </div>
+        )}
+        <div className={styles.mapCol} style={{ position: 'relative' }}>
+          <MapView
+            listings={filtered}
+            activeId={activeId}
+            onMarkerClick={handleListingClick}
+            mapVisible={!showModal && !listOpen}
+            poiMarkers={detailPoiMarkers}
+          />
+          {!showModal && !listOpen && (
+            <button
+              className={styles.btnShowList}
+              onClick={() => setListOpen(true)}
+            >
+              ☰ 목록 보기
+            </button>
+          )}
+        </div>
       </div>
+
+      {showModal && (
+        <ResultModal
+          personality={personality}
+          importanceMap={importanceMap}
+          preferTwoRoom={preferTwoRoom}
+          listings={filtered}
+          onClose={() => { setShowModal(false); setListOpen(true) }}
+        />
+      )}
+
+      {!showModal && detailListing && (
+        <ListingDetailModal
+          listing={detailListing}
+          rank={filtered.findIndex(l => l.id === detailListing.id) + 1}
+          poiMarkers={detailPoiMarkers}
+          onClose={() => { setDetailListing(null) }}
+        />
+      )}
     </div>
   )
 }
