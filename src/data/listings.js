@@ -44,7 +44,16 @@ function parseCsv(raw) {
       ? ['원룸', id % 3 === 0 ? '풀옵션' : id % 3 === 1 ? '채광 좋음' : '보증금 협의']
       : ['투룸', id % 2 === 0 ? '주차 가능' : '신축']
 
-    return { id, name, room: roomType, monthly, deposit, tags, address, lat, lng }
+    const area  = isOneRoom
+      ? (8 + (id % 5) * 1.5).toFixed(1)
+      : (15 + (id % 6) * 2).toFixed(1)
+    const options = isOneRoom
+      ? ['에어컨', '냉장고', id % 3 === 0 ? '세탁기' : id % 3 === 1 ? '전자레인지' : '인덕션',
+         id % 2 === 0 ? '침대' : '책상', id % 4 === 0 ? '옷장' : '선풍기']
+      : ['에어컨', '냉장고', '세탁기', '전자레인지', id % 2 === 0 ? '침대' : '소파', '옷장']
+    const phone = '010-1946-2026'
+
+    return { id, name, room: roomType, monthly, deposit, area, options, phone, tags, address, lat, lng }
   })
 }
 

@@ -1,0 +1,270 @@
+.page {
+  position: fixed;
+  inset: 0;
+  background: #fffde7;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: slideIn 0.22s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* ── 헤더 ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: #fff9c4;
+  border-bottom: 1px solid #fff176;
+  flex-shrink: 0;
+}
+
+.btnBack {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #3e2723;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 4px 0;
+}
+
+.btnBack:hover { color: #5d4037; }
+
+.rankBadge {
+  background: #1a237e;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  border-radius: 8px;
+  padding: 3px 10px;
+}
+
+/* ── 사진 공간 ── */
+.photoArea {
+  width: 100%;
+  height: 220px;
+  background: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.photoIcon {
+  font-size: 2.5rem;
+  opacity: 0.4;
+}
+
+.photoHint {
+  font-size: 0.82rem;
+  color: #999;
+}
+
+/* ── 본문 ── */
+.body {
+  padding: 24px 20px 40px;
+  flex: 1;
+}
+
+.titleRow {
+  margin-bottom: 20px;
+}
+
+.name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #3e2723;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.roomBadge {
+  font-size: 0.72rem;
+  background: #fff9c4;
+  color: #6d4c41;
+  border: 1px solid #fff176;
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* ── 정보 그리드 ── */
+.infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.infoItem {
+  background: #fff;
+  border: 1px solid #fff176;
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.infoLabel {
+  font-size: 0.7rem;
+  color: #a08060;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.infoValue {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #3e2723;
+}
+
+.divider {
+  height: 1px;
+  background: #fff176;
+  margin-bottom: 20px;
+}
+
+/* ── 섹션 ── */
+.section {
+  margin-bottom: 20px;
+}
+
+.sectionLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #a08060;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.sectionValue {
+  font-size: 0.9rem;
+  color: #5d4037;
+  line-height: 1.6;
+}
+
+.optionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* ── 추천 이유 ── */
+.reasonBox {
+  margin-top: 28px;
+  background: #fff;
+  border: 1.5px solid #1a237e22;
+  border-radius: 16px;
+  padding: 20px 18px;
+}
+
+.reasonTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #1a237e;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.reasonScore {
+  font-size: 0.82rem;
+  color: #5d4037;
+  margin-bottom: 14px;
+}
+
+.reasonScore strong {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #1a237e;
+}
+
+.reasonList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reasonRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reasonEmoji {
+  font-size: 1.4rem;
+  width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.reasonInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.reasonName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #3e2723;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reasonSub {
+  font-size: 0.72rem;
+  color: #a08060;
+}
+
+.reasonDist {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: #1a237e;
+  border-radius: 20px;
+  padding: 3px 10px;
+  flex-shrink: 0;
+}
+
+.reasonDistSoft {
+  background: #6d4c41 !important;
+}
+
+.reasonEmpty {
+  font-size: 0.82rem;
+  color: #a08060;
+  margin: 0;
+}
+
+.optionTag {
+  font-size: 0.95rem;
+  background: #fff9c4;
+  border: 1.5px solid #ffe082;
+  color: #3e2723;
+  border-radius: 10px;
+  padding: 7px 16px;
+  font-weight: 700;
+}

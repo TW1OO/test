@@ -81,7 +81,7 @@ function buildClusters(listings, radiusM = 20) {
   return result
 }
 
-export default function MapView({ listings, activeId, onMarkerClick, mapVisible, poiMarkers }) {
+export default function MapView({ listings, activeId, onMarkerClick, onOpenDetail, mapVisible, poiMarkers }) {
   const mapRef     = useRef(null)
   const mapObj     = useRef(null)
   const singleMap  = useRef({})
@@ -146,14 +146,27 @@ export default function MapView({ listings, activeId, onMarkerClick, mapVisible,
           const m = L.marker([item.lat, item.lng], { icon: defaultIcon })
             .addTo(mapObj.current)
             .bindPopup(`
-              <div class="popup-name">📍 ${item.name} (${item.room})</div>
-              <div class="popup-dist">편의점(${item.convName})까지 ${item.convDist}m</div>
-              <div class="popup-price">월세 ${item.monthly}만 / 보증금 ${item.deposit}만</div>
-            `)
+              <div class="popup-card" style="cursor:pointer;min-width:160px;">
+                <div class="popup-name" style="font-weight:700;font-size:13px;margin-bottom:4px;">📍 ${item.name}</div>
+                <div class="popup-room" style="font-size:11px;color:#6d4c41;margin-bottom:4px;">${item.room} · ${item.area}평</div>
+                <div class="popup-price" style="font-size:12px;font-weight:600;color:#1a237e;margin-bottom:6px;">월세 ${item.monthly}만 / 보증금 ${item.deposit}만</div>
+                <div class="popup-hint" style="font-size:11px;color:#888;text-align:right;">탭하여 상세보기 →</div>
+              </div>
+            `, { maxWidth: 220 })
 
           m.on('click', () => {
             if (!isExpanded) collapse()
             onMarkerClick(item.id)
+          })
+
+          m.on('popupopen', (e) => {
+            const el = e.popup.getElement()?.querySelector('.popup-card')
+            if (el) {
+              el.addEventListener('click', () => {
+                m.closePopup()
+                onOpenDetail?.(item)
+              }, { once: true })
+            }
           })
 
           singleMap.current[item.id] = m

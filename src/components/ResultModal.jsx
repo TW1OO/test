@@ -1,14 +1,20 @@
 import styles from './ResultModal.module.css'
 
 const POI_META = {
-  conv:       { label: '편의점',   emoji: '🏪' },
-  mart:       { label: '마트',     emoji: '🛒' },
-  hospital:   { label: '병원',     emoji: '🏥' },
-  cafe:       { label: '카페',     emoji: '☕' },
-  gym:        { label: '헬스장',   emoji: '💪' },
-  university: { label: '대학교',   emoji: '🎓' },
-  subway:     { label: '지하철',   emoji: '🚇' },
-  police:     { label: '경찰서',   emoji: '🚔' },
+  conv:        { label: '편의점',   emoji: '🏪' },
+  mart:        { label: '마트',     emoji: '🛒' },
+  hospital:    { label: '병원',     emoji: '🏥' },
+  cafe:        { label: '카페',     emoji: '☕' },
+  gym:         { label: '헬스장',   emoji: '💪' },
+  university:  { label: '대학교',   emoji: '🎓' },
+  subway:      { label: '지하철',   emoji: '🚇' },
+  police:      { label: '경찰서',   emoji: '🚔' },
+  optionCount: { label: '풀옵션',   emoji: '📦' },
+  size:        { label: '방 넓이',  emoji: '📏' },
+  floor:       { label: '층수',     emoji: '🏢' },
+  roomLoft:    { label: '구조',     emoji: '🌙' },
+  fireStation: { label: '소방서',   emoji: '🔥' },
+  admin:       { label: '행정시설', emoji: '📄' },
 }
 
 export default function ResultModal({ personality, importanceMap, preferTwoRoom, listings, onClose }) {
@@ -17,7 +23,7 @@ export default function ResultModal({ personality, importanceMap, preferTwoRoom,
     .map(([key, avg]) => ({ key, avg, ...(POI_META[key] ?? { label: key, emoji: '📍' }) }))
     .sort((a, b) => b.avg - a.avg)
 
-  const topListings = (listings ?? []).filter(l => l.matchScore >= 0.7).slice(0, 3)
+  const topListings = (listings ?? []).filter(l => l.matchScore >= 0.8).slice(0, 3)
 
   return (
     <div className={styles.overlay}>

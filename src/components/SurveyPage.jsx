@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { TEST_QUESTIONS, FULL_QUESTIONS } from '../data/questions'
+import { getTestQuestions, getFullQuestions } from '../data/questions'
 import styles from './SurveyPage.module.css'
 
 const SCALE_LABELS = ['전혀\n아니다', '아니다', '보통\n이다', '그렇다', '매우\n그렇다']
@@ -7,25 +7,38 @@ const SCALE_LABELS = ['전혀\n아니다', '아니다', '보통\n이다', '그�
 export default function SurveyPage({ onComplete }) {
   const [stage, setStage]           = useState('landing')  // 'landing' | 'budget' | 'survey'
   const [mode, setMode]             = useState(null)
+  const [questions, setQuestions]   = useState([])
   const [step, setStep]             = useState(1)
   const [answers, setAnswers]       = useState({})
   const [budgetText, setBudgetText] = useState('')
   const [budgetData, setBudgetData] = useState(null)
   const [budgetLoading, setBudgetLoading] = useState(false)
 
-  const questions = mode === 'test' ? TEST_QUESTIONS : FULL_QUESTIONS
   const current   = stage === 'survey' ? questions[step - 1] : null
   const isLast    = step === questions?.length
 
   function startSurvey(selectedMode) {
     setMode(selectedMode)
+    setQuestions(selectedMode === 'test' ? getTestQuestions() : getFullQuestions())
     setAnswers({})
     setStage('budget')
+  }
+
+  function parseLocalBudget(text) {
+    const out = { maxMonthly: null, maxDeposit: null, preferTwoRoom: null, poiBoosts: {} }
+    const monthly = text.match(/월세\s*(\d+)\s*만/)
+    if (monthly) out.maxMonthly = Number(monthly[1])
+    const deposit = text.match(/보증금\s*(\d+)\s*만/)
+    if (deposit) out.maxDeposit = Number(deposit[1])
+    if (/투룸/.test(text)) out.preferTwoRoom = true
+    else if (/원룸/.test(text)) out.preferTwoRoom = false
+    return out
   }
 
   async function handleBudgetNext() {
     if (budgetText.trim()) {
       setBudgetLoading(true)
+      let parsed = parseLocalBudget(budgetText)   // 로컬 파서 결과를 기본값으로
       try {
         const res = await fetch('/api/parse-budget', {
           method: 'POST',
@@ -33,10 +46,11 @@ export default function SurveyPage({ onComplete }) {
           body: JSON.stringify({ text: budgetText }),
         })
         const data = await res.json()
-        setBudgetData(data)
-      } catch {
-        // API 실패 시 budget 없이 진행
+        if (!data.error) parsed = data             // LLM 성공 시 덮어쓰기
+      } catch (e) {
+        console.warn('[parse-budget] API 실패, 로컬 파서 사용:', e.message)
       }
+      setBudgetData(parsed)
       setBudgetLoading(false)
     }
     setStage('survey')
@@ -104,7 +118,7 @@ export default function SurveyPage({ onComplete }) {
             </button>
             <button className={styles.btnFull} onClick={() => startSurvey('full')}>
               <span className={styles.btnModeLabel}>🔍 정밀 검사</span>
-              <span className={styles.btnModeSub}>10문항 · 3분</span>
+              <span className={styles.btnModeSub}>15문항 · 3분</span>
             </button>
           </div>
         </div>

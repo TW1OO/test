@@ -3,7 +3,7 @@ import SurveyPage from './components/SurveyPage'
 import ResultsSidebar from './components/ResultsSidebar'
 import ResultModal from './components/ResultModal'
 import MapView from './components/MapView'
-import ListingDetailModal from './components/ListingDetailModal'
+import ListingDetailPage from './components/ListingDetailPage'
 import { listings as allListings } from './data/listings'
 import { computeResults, generatePersonality, scoreListings } from './utils/surveyScore'
 import styles from './App.module.css'
@@ -26,6 +26,7 @@ export default function App() {
   const [surveyData, setSurveyData]     = useState(null)
   const [activeId, setActiveId]         = useState(null)
   const [detailListing, setDetailListing] = useState(null)
+  const [detailPage, setDetailPage]     = useState(null)
 
   function handleSurveyComplete(answers, questions, budgetData) {
     const results     = computeResults(answers, questions)
@@ -43,9 +44,17 @@ export default function App() {
     setShowModal(false)
     setActiveId(null)
     setDetailListing(null)
+    setDetailPage(null)
   }
 
-  function handleListingClick(id) {
+  // 사이드바 카드 클릭 → 지도 포커스만
+  function handleCardClick(id) {
+    setActiveId(id)
+    setDetailListing(filtered.find(l => l.id === id) ?? null)
+  }
+
+  // 지도 마커 클릭 → activeId 설정
+  function handleMarkerClick(id) {
     setActiveId(id)
     setDetailListing(filtered.find(l => l.id === id) ?? null)
   }
@@ -74,10 +83,11 @@ export default function App() {
     let scored = scoreListings(allListings, blendedImportance, effectivePreferTwoRoom, effectiveRoomType, fieldMap)
 
     // 예산 필터
-    if (budgetData?.maxMonthly) scored = scored.filter(l => l.monthly <= budgetData.maxMonthly)
-    if (budgetData?.maxDeposit)  scored = scored.filter(l => l.deposit  <= budgetData.maxDeposit)
+    if (budgetData?.maxMonthly != null) scored = scored.filter(l => l.monthly <= Number(budgetData.maxMonthly))
+    if (budgetData?.maxDeposit  != null) scored = scored.filter(l => l.deposit  <= Number(budgetData.maxDeposit))
 
-    return scored
+    // 정확도 75% 미만 제외
+    return scored.filter(l => l.matchScore >= 0.80)
   }, [surveyData])
 
   // 선택된 매물의 중요 POI 마커 (중요도 3점 이상)
@@ -126,9 +136,10 @@ export default function App() {
               activeId={activeId}
               isOpen={listOpen}
               onToggle={() => setListOpen(o => !o)}
-              onCardClick={handleListingClick}
+              onCardClick={handleCardClick}
               personality={personality}
               onRetake={handleRetake}
+              importanceMap={importanceMap}
             />
           </div>
         )}
@@ -136,7 +147,8 @@ export default function App() {
           <MapView
             listings={filtered}
             activeId={activeId}
-            onMarkerClick={handleListingClick}
+            onMarkerClick={handleMarkerClick}
+            onOpenDetail={listing => { setDetailListing(listing); setDetailPage(listing) }}
             mapVisible={!showModal && !listOpen}
             poiMarkers={detailPoiMarkers}
           />
@@ -161,12 +173,13 @@ export default function App() {
         />
       )}
 
-      {!showModal && detailListing && (
-        <ListingDetailModal
-          listing={detailListing}
-          rank={filtered.findIndex(l => l.id === detailListing.id) + 1}
+{detailPage && (
+        <ListingDetailPage
+          listing={detailPage}
+          rank={filtered.findIndex(l => l.id === detailPage.id) + 1}
           poiMarkers={detailPoiMarkers}
-          onClose={() => { setDetailListing(null) }}
+          importanceMap={surveyData.importanceMap}
+          onClose={() => setDetailPage(null)}
         />
       )}
     </div>

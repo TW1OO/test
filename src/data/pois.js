@@ -31,7 +31,7 @@ function parsePois(raw) {
 const rawPois = parsePois(rawCsv)
 
 // 하단역환승센터(아트 가든 하단) 좌표로 고정 보정
-const SUBWAY_OVERRIDE = { lat: 35.103690, lng: 128.967215, name: '하단역환승센터' }
+const SUBWAY_OVERRIDE = { lat: 35.103690, lng: 128.967319, name: '하단역환승센터' }
 export const pois = rawPois.map(p =>
   p.type === 'subway' ? { ...p, ...SUBWAY_OVERRIDE } : p
 )

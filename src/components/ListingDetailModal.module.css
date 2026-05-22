@@ -135,6 +135,15 @@
   flex-shrink: 0;
 }
 
+.tapHint {
+  margin-top: 10px;
+  font-size: 0.7rem;
+  color: #1a237e;
+  font-weight: 600;
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
 @media (max-width: 768px) {
   .modal {
     bottom: 16px;

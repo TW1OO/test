@@ -1,7 +1,29 @@
+import ListingCard from './ListingCard'
 import styles from './ResultsSidebar.module.css'
 
+const POI_DIST_META = {
+  conv:       { emoji: '🏪', label: '편의점', distKey: 'convDist',       nameKey: 'convName' },
+  mart:       { emoji: '🛒', label: '마트',   distKey: 'martDist',       nameKey: 'martName' },
+  hospital:   { emoji: '🏥', label: '병원',   distKey: 'hospitalDist',   nameKey: 'hospitalName' },
+  cafe:       { emoji: '☕', label: '카페',   distKey: 'cafeDist',       nameKey: 'cafeName' },
+  gym:        { emoji: '💪', label: '헬스장', distKey: 'gymDist',        nameKey: 'gymName' },
+  university: { emoji: '🎓', label: '대학교', distKey: 'universityDist', nameKey: 'universityName' },
+  subway:     { emoji: '🚇', label: '지하철', distKey: 'subwayDist',     nameKey: 'subwayName' },
+  police:     { emoji: '🚔', label: '경찰서', distKey: 'policeDist',     nameKey: 'policeName' },
+}
+
+function getTopPoi(listing, importanceMap) {
+  const sorted = Object.keys(POI_DIST_META)
+    .filter(k => importanceMap[k] != null && listing[POI_DIST_META[k].distKey] != null)
+    .sort((a, b) => (importanceMap[b] ?? 0) - (importanceMap[a] ?? 0))
+  if (!sorted.length) return null
+  const key = sorted[0]
+  const meta = POI_DIST_META[key]
+  return { emoji: meta.emoji, label: meta.label, name: listing[meta.nameKey], dist: listing[meta.distKey] }
+}
+
 export default function ResultsSidebar({
-  listings, activeId, isOpen, onToggle, onCardClick, personality, onRetake,
+  listings, activeId, isOpen, onToggle, onCardClick, personality, onRetake, importanceMap = {},
 }) {
   return (
     <div className={styles.sidebar}>
@@ -32,27 +54,14 @@ export default function ResultsSidebar({
               </p>
             ) : (
               listings.map((l, i) => (
-                <div
+                <ListingCard
                   key={l.id}
-                  className={`${styles.card} ${l.id === activeId ? styles.cardActive : ''}`}
+                  listing={l}
+                  rank={i + 1}
+                  isActive={l.id === activeId}
+                  topPoi={getTopPoi(l, importanceMap)}
                   onClick={() => onCardClick(l.id)}
-                >
-                  <div className={styles.cardTop}>
-                    <span className={styles.cardName}>{l.name}</span>
-                    <div className={styles.cardBadges}>
-                      <span className={styles.rankBadge}>{i + 1}위</span>
-                      <span className={styles.cardRoom}>{l.room}</span>
-                    </div>
-                  </div>
-                  <div className={styles.cardPrice}>
-                    월세 {l.monthly}만 · 보증금 {l.deposit}만
-                  </div>
-                  <div className={styles.cardTags}>
-                    {l.tags?.map(t => (
-                      <span key={t} className={styles.tag}>{t}</span>
-                    ))}
-                  </div>
-                </div>
+                />
               ))
             )}
           </div>
