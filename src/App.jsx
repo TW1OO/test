@@ -15,8 +15,10 @@ const POI_META = {
   cafe:       { label: '카페',   emoji: '☕', latKey: 'cafePoiLat',       lngKey: 'cafePoiLng',       distKey: 'cafeDist',       nameKey: 'cafeName' },
   gym:        { label: '헬스장', emoji: '💪', latKey: 'gymPoiLat',        lngKey: 'gymPoiLng',        distKey: 'gymDist',        nameKey: 'gymName' },
   university: { label: '대학교', emoji: '🎓', latKey: 'universityPoiLat', lngKey: 'universityPoiLng', distKey: 'universityDist', nameKey: 'universityName' },
-  subway:     { label: '지하철', emoji: '🚇', latKey: 'subwayPoiLat',     lngKey: 'subwayPoiLng',     distKey: 'subwayDist',     nameKey: 'subwayName' },
-  police:     { label: '경찰서', emoji: '🚔', latKey: 'policePoiLat',     lngKey: 'policePoiLng',     distKey: 'policeDist',     nameKey: 'policeName' },
+  subway:      { label: '지하철', emoji: '🚇', latKey: 'subwayPoiLat',      lngKey: 'subwayPoiLng',      distKey: 'subwayDist',      nameKey: 'subwayName' },
+  police:      { label: '경찰서', emoji: '🚔', latKey: 'policePoiLat',      lngKey: 'policePoiLng',      distKey: 'policeDist',      nameKey: 'policeName' },
+  fireStation: { label: '소방서', emoji: '🔥', latKey: 'fireStationPoiLat', lngKey: 'fireStationPoiLng', distKey: 'fireStationDist', nameKey: 'fireStationName' },
+  admin:       { label: '행정기관', emoji: '📄', latKey: 'adminPoiLat',     lngKey: 'adminPoiLng',       distKey: 'adminDist',       nameKey: 'adminName' },
 }
 
 export default function App() {
